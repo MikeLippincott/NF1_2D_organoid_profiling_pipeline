@@ -257,10 +257,9 @@ for featurization_type in well_fov_dict.keys():
             continue
 
 
-# In[9]:
+# In[ ]:
 
 
-# output_dict_of_dfs['middle_slice']['df_list']
 # read in the dataframes and concatenate them in place
 for featurization_type in output_dict_of_dfs.keys():
     print(
