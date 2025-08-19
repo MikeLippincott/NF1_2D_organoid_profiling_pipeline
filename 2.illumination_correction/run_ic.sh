@@ -11,7 +11,8 @@ jupyter nbconvert --to script --output-dir=scripts/ notebooks/*.ipynb
 
 cd scripts/ || exit 1
 
-patient_array=( "NF0014" "NF0016" "NF0018" "NF0021" "NF0030" "NF0040" "SARCO219" "SARCO361" )
+# patient_array=( "NF0014" "NF0016" "NF0018" "NF0021" "NF0030" "NF0040" "SARCO219" "SARCO361" )
+patient_array=( "NF0030" "NF0040" )
 
 for patient in "${patient_array[@]}"; do
 echo "Processing patient: $patient"

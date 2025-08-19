@@ -2,8 +2,8 @@
 # coding: utf-8
 
 # This notebook focuses on trying to find a way to segment cells within organoids properly.
-# The end goal is to segment cells and extract morphology features from cellprofiler.
-# These masks must be imported into cellprofiler to extract features.
+# The end goal is to segment cells and extract morphology features from CellProfiler.
+# These masks must be imported into CellProfiler to extract features.
 
 # ## import libraries
 
@@ -31,7 +31,7 @@ except NameError:
 
 # ## parse args and set paths
 
-# If if a notebook run the hardcoded paths.
+# If a notebook run the hardcoded paths.
 # However, if this is run as a script, the paths are set by the parsed arguments.
 
 # In[2]:

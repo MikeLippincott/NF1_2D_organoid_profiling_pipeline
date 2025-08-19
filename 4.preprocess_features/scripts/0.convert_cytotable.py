@@ -31,7 +31,7 @@ except NameError:
     in_notebook = False
 
 
-# In[2]:
+# In[ ]:
 
 
 if not in_notebook:
@@ -49,7 +49,7 @@ if not in_notebook:
     patient = args.patient
 else:
     print("Running in a notebook")
-    patient = "NF0014"
+    patient = "NF0016"
 
 middle_slice_input = pathlib.Path(
     f"../../data/{patient}/cellprofiler_middle_slice_output/"

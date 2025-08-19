@@ -10,22 +10,26 @@ jupyter nbconvert --to script --output-dir=scripts/ notebooks/*.ipynb
 
 cd scripts/ || exit
 
-patient="NF0014"
-z_stack_dir="../../data/$patient/zstack_images"
+patient_array=( "NF0014" "NF0016" "NF0018" "NF0021" "NF0030" "NF0040" "SARCO219" "SARCO361" )
 
-mapfile -t well_fovs < <(ls -d "$z_stack_dir"/*)
+for patient in "${patient_array[@]}"; do
+echo "Processing patient: $patient"
+    z_stack_dir="../../data/$patient/zstack_images"
 
-total_dirs=$(echo "${well_fovs[@]}" | wc -w)
-echo "Total directories: $total_dirs"
-# loop through all input directories
-for well_fov in "${well_fovs[@]}"; do
-    well_fov=${well_fov%*/}
-    well_fov=$(basename "$well_fov")
-    echo "Processing well_fov: $well_fov"
+    mapfile -t well_fovs < <(ls -d "$z_stack_dir"/*)
 
-    python cp_analysis.py \
-        --patient "$patient" \
-        --well_fov "$well_fov"
+    total_dirs=$(echo "${well_fovs[@]}" | wc -w)
+    echo "Total directories: $total_dirs"
+    # loop through all input directories
+    for well_fov in "${well_fovs[@]}"; do
+        well_fov=${well_fov%*/}
+        well_fov=$(basename "$well_fov")
+        echo "Processing well_fov: $well_fov"
+
+        python cp_analysis.py \
+            --patient "$patient" \
+            --well_fov "$well_fov"
+    done
 
 done
 
