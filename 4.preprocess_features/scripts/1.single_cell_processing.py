@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Process single cell profiles
+# # Process single cell and organoid profiles
 
 # ## Import libraries
 

@@ -437,17 +437,6 @@ combined_profiles_df = pd.DataFrame(combined_profiles_list)
 combined_profiles_df
 
 
-# In[10]:
-
-
-pd.read_parquet(combined_profiles_df["profile_path"][23]).groupby(
-    [
-        "Metadata_patient_tumor",
-        # "Metadata_treatment"
-    ]
-).value_counts("")
-
-
 # In[11]:
 
 
@@ -466,41 +455,3 @@ for profile_path in tqdm.tqdm(
             print(
                 f"Profile {profile_path} has {num_missing} missing values in metadata column {metadata_column}."
             )
-
-
-# In[12]:
-
-
-df = pd.read_parquet(combined_profiles_df["profile_path"][0])
-pd.read_parquet(combined_profiles_df["profile_path"][0])["Metadata_Plate"].unique()
-
-
-# In[13]:
-
-
-df["Metadata_Plate"].unique()
-
-
-# In[14]:
-
-
-# find all rows that contain none
-
-rows_with_none = df[df["Metadata_Plate"].isnull()]
-# rows_with_none['Metadata_patient_tumor']
-rows_with_none["Metadata_Plate"]
-
-
-# In[15]:
-
-
-rows_with_none
-
-
-# In[16]:
-
-
-rows_with_none.loc[:, rows_with_none.isnull().any()]
-
-
-# In[ ]:

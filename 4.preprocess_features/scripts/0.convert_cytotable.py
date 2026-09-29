@@ -153,7 +153,7 @@ for sqlite_dir in [max_projected_input, middle_slice_input, middle_n_slice_input
 output_dict_of_dfs
 
 
-# In[6]:
+# In[ ]:
 
 
 total = 0
@@ -224,6 +224,7 @@ for featurization_type in tqdm.tqdm(well_fov_dict.keys(), leave=True):
             if not "An existing file or directory was provided as dest_path" in str(e):
                 errors += 1
                 print(f"Error processing {sqlite_file}: {e}")
+                # write an empty parquet file to use down the line
                 full_schema_for_sc.to_parquet(
                     f"{well_fov_dict[featurization_type][well_fov]['output_dir']}_sc.parquet"
                 )

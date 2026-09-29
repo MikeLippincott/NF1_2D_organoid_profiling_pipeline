@@ -147,7 +147,7 @@ with open(organoid_blocklist_path, "w") as f:
         f.write(f"{item}\n")
 
 
-# In[7]:
+# In[ ]:
 
 
 dict_of_dfs_to_process = {
@@ -168,7 +168,7 @@ for profile_type in levels_to_merge_dict.keys():
     for compartment in levels_to_merge_dict[profile_type].keys():
         list_of_dfs = []
         for file in levels_to_merge_dict[profile_type][compartment]:
-            patient_id = str(file.parent).split("/")[-3]
+            patient_id = str(file.parent).split("/")[-3]  # -3 is the patient ID
             df = pd.read_parquet(file)
             df["Metadata_patient_tumor"] = patient_id
             list_of_dfs.append(df)
@@ -359,3 +359,14 @@ for profile_type in dict_of_dfs_to_process.keys():
                 "The number features before feature selection:", original_data_shape[1]
             )
             print("The number features after feature selection:", fs_profiles.shape[1])
+
+
+# In[ ]:
+
+
+import pandas as pd
+
+pd.read_parquet("../../data/all_patient_profiles/max_projection/sc_fs_profiles.parquet")
+
+
+# In[ ]:
