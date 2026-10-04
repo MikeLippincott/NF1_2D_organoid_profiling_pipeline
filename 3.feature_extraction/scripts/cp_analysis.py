@@ -53,8 +53,8 @@ if not in_notebook:
 
 else:
     print("Running in a notebook")
-    well_fov = "C2-1"
-    patient = "NF0014_T1"
+    well_fov = "G9-2"
+    patient = "NF0037_T1"
 
 
 max_projected_input = pathlib.Path(

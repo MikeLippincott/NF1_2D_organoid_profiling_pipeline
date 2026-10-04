@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -22,7 +22,7 @@ image_base_dir = bandicoot_check(
 )
 
 
-# In[2]:
+# In[ ]:
 
 
 patients_dir = pathlib.Path(f"{image_base_dir}/data/").resolve(
@@ -40,16 +40,14 @@ patient_dirs = [d for d in patients_dir.iterdir() if d.is_dir() and d.name in pa
 patient_dirs.sort()
 
 
-# In[3]:
+# In[ ]:
 
 
 # get a list of the well_fov directories for each patient
 well_fov_dirs = [
     x
     for patient_dir in patient_dirs
-    for x in pathlib.Path(
-        f"{patient_dir}/2D_analysis/1b.middle_slice_illum_correction"
-    ).iterdir()
+    for x in pathlib.Path(f"{patient_dir}/2D_analysis/0b.middle_slice").iterdir()
     if x.is_dir()
 ]
 well_fov_dirs.sort()
@@ -61,7 +59,7 @@ well_fov_df["well_fov"] = well_fov_df["dir_path"].apply(lambda x: x.stem)
 well_fov_df
 
 
-# In[4]:
+# In[ ]:
 
 
 present_files = 0
@@ -96,7 +94,7 @@ for index, row in well_fov_df.iterrows():
         present_files += 1
 
 
-# In[5]:
+# In[ ]:
 
 
 reruns_df = pd.DataFrame(missing_files_list, columns=["dir_path"])
@@ -110,7 +108,7 @@ reruns_df.to_csv(
 )
 
 
-# In[6]:
+# In[ ]:
 
 
 print(f"Total directories checked: {len(well_fov_df) * 3}")

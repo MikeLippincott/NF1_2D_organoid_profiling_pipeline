@@ -70,7 +70,7 @@ if not in_notebook:
     )
 else:
     print("Running in a notebook")
-    patient = "NF0014_T1"
+    patient = "NF0037_T1"
     well_fov = "C4-2"
     clip_limit = 0.02
     twoD_method = "zmax"
@@ -138,7 +138,7 @@ if in_notebook:
     plt.show()
 
 
-# In[ ]:
+# In[6]:
 
 
 # this calls to stop profiling and cellects information about the run

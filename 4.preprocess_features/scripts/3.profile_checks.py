@@ -455,3 +455,21 @@ for profile_path in tqdm.tqdm(
             print(
                 f"Profile {profile_path} has {num_missing} missing values in metadata column {metadata_column}."
             )
+
+
+# In[5]:
+
+
+import pathlib
+
+import pandas as pd
+
+df = pd.read_parquet(
+    pathlib.Path(
+        "/home/lippincm/mnt/bandicoot/NF1_organoid_data/data/NF0037_T1/2D_analysis/5.normalized/max_projected_sc.parquet"
+    )
+)
+df
+
+
+# In[ ]:

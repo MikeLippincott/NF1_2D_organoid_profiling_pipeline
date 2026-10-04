@@ -8,7 +8,8 @@ jupyter nbconvert --to script --output-dir=scripts/ notebooks/*.ipynb
 
 input_file="loadfiles/segmentation_loadfile.txt"
 
-conda activate GFF_segmentation_2D
+git_root=$(git rev-parse --show-toplevel)
+UV_RUN=(uv run --project "$git_root" --no-sync)
 
 patient_well_fov_counter=0
 # get the number of lines in the input file
@@ -35,19 +36,19 @@ while IFS= read -r line; do
     touch "$log_file"
 
     {
-        python scripts/0.segment_nuclei.py \
+        "${UV_RUN[@]}" python scripts/0.segment_nuclei.py \
             --patient "$patient" \
             --well_fov "$well_fov" \
             --clip_limit 0.02 \
             --twoD_method "$twoD_method"
 
-        python scripts/1.segment_cells.py \
+        "${UV_RUN[@]}" python scripts/1.segment_cells.py \
             --patient "$patient" \
             --well_fov "$well_fov" \
             --clip_limit 0.04 \
             --twoD_method "$twoD_method"
 
-        python scripts/2.segment_organoids.py \
+        "${UV_RUN[@]}" python scripts/2.segment_organoids.py \
             --patient "$patient" \
             --well_fov "$well_fov" \
             --clip_limit 0.04 \
