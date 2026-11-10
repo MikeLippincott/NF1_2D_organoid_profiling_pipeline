@@ -115,7 +115,7 @@ for f in files:
         cell = io.imread(f)
 
 
-# In[ ]:
+# In[5]:
 
 
 elevation_map_threshold_signal = skimage.filters.gaussian(cell, sigma=3)

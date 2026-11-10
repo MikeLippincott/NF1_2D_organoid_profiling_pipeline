@@ -11,7 +11,6 @@ ILLUMINATION_CORRECTION=FALSE
 SEGMENT=TRUE
 EXTRACT_FEATURES=TRUE
 IMAGE_BASED_PROFILING=TRUE
-ANALYSIS=FALSE
 
 ##################################
 # Place holder for data download / streaming
@@ -89,18 +88,4 @@ if [ "$IMAGE_BASED_PROFILING" = TRUE ] ; then
     cd .. || exit
 else
     echo "Skipping Image-based Profiling Module..."
-fi
-
-
-##################################
-# Analysis
-##################################
-if [ "$ANALYSIS" = TRUE ] ; then
-    echo "Running Analysis Module..."
-    cd 5.analyze_data || exit
-    # shellcheck disable=SC1091
-    source run_eda.sh
-    cd .. || exit
-else
-    echo "Skipping Analysis Module..."
 fi

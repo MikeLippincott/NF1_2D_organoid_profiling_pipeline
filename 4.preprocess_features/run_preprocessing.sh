@@ -1,14 +1,24 @@
 #!/bin/bash
 
-RUN_CYTOTABLE="TRUE"
+RUN_CYTOTABLE="FALSE"
 
-# initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
-conda init bash
-# activate the preprocessing environment
-conda activate nf1_image_based_profiling_env
 
 # convert Jupyter notebooks to scripts
 jupyter nbconvert --to script --output-dir=scripts/ notebooks/*.ipynb
+
+git_root=$(git rev-parse --show-toplevel)
+
+if [ -d "/scratch/alpine" ]; then
+    echo "Using Alpine environment"
+    ENV_PATH="/projects/mlippincott@xsede.org/software/uv/envs/nf1_2d_uv_env/.venv"
+elif [ -d "/anvil" ]; then
+    ENV_PATH="/anvil/projects/x-bio260064/software/uv/envs/nf1_2d_uv_env/.venv"
+else
+    ENV_PATH="$git_root/.venv"
+fi
+
+PYTHON_BIN="$ENV_PATH/bin/python3"
+
 
 cd scripts/ || exit
 patient_array_file_path="../../data/patient_IDs.txt"
@@ -20,10 +30,10 @@ for patient in "${patient_array[@]}"; do
     if [ $RUN_CYTOTABLE = "TRUE" ] ; then
         python 0.convert_cytotable.py --patient "$patient"
     fi
-    python 1.single_cell_processing.py --patient "$patient"
+    "$PYTHON_BIN" 1.single_cell_processing.py --patient "$patient"
 done
 
-python 2.combine_patients.py
+"$PYTHON_BIN" 2.combine_patients.py
 
 conda deactivate
 
