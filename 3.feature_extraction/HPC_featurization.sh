@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --ntasks=6
+#SBATCH --ntasks=2
 #SBATCH --account=amc-general
 #SBATCH --partition=amilan
 #SBATCH --qos=long
@@ -13,7 +13,7 @@ git_root=$(git rev-parse --show-toplevel)
 
 if [ -d "/scratch/alpine" ]; then
     echo "Using Alpine environment"
-    ENV_PATH="/projects/mlippincott@xsede.org/software/uv/envs/nf1_uv_env/.venv"
+    ENV_PATH="/projects/mlippincott@xsede.org/software/uv/envs/nf1_2d_uv_env/.venv"
 
     # we need to setup and redirect the output of cellprofiler to work with the HPC environment
     # the scratch space on the HPC is not discoverable by the container
@@ -29,7 +29,7 @@ if [ -d "/scratch/alpine" ]; then
     echo "Using NF_OUTPUT_BASE_DIR=$NF_OUTPUT_BASE_DIR"
     echo "Using APPTAINER_BINDPATH=$APPTAINER_BINDPATH"
 elif [ -d "/anvil" ]; then
-    ENV_PATH="/anvil/projects/x-bio260064/software/uv/envs/nf1_uv_env/.venv"
+    ENV_PATH="/anvil/projects/x-bio260064/software/uv/envs/nf1_2d_uv_env/.venv"
 
     # we need to setup and redirect the output of cellprofiler to work with the HPC environment
     # the scratch space on the HPC is not discoverable by the container
@@ -50,7 +50,7 @@ fi
 
 PYTHON_BIN="$ENV_PATH/bin/python3"
 
-
+$PYTHON_BIN "$git_root/3.feature_extraction/scripts/check_for_file_completion.py"
 
 input_file="$git_root/3.feature_extraction/loadfiles/featurization_loadfile.txt"
 
@@ -87,6 +87,7 @@ while IFS= read -r line; do
             --well_fov "$well_fov"
     } &> "$log_file"
 
+# done < <(tac "$input_file")
 done < "$input_file"
 
 cd ../ || exit

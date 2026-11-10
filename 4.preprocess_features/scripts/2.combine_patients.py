@@ -7,17 +7,17 @@
 import os
 import pathlib
 
-import duckdb
 import pandas as pd
-from notebook_init_utils import bandicoot_check, init_notebook
+from image_analysis_2D.file_utils.notebook_init_utils import (
+    bandicoot_check,
+    init_notebook,
+)
 from pycytominer import aggregate, feature_select
 
 root_dir, in_notebook = init_notebook()
 profile_base_dir = bandicoot_check(
     pathlib.Path(os.path.expanduser("~/mnt/bandicoot")).resolve(), root_dir
 )
-
-profile_base_dir = root_dir
 
 
 # In[2]:
@@ -63,7 +63,6 @@ for patient in patients:
         f"{profile_base_dir}/data/{patient}/2D_analysis/5.normalized"
     )
     for file in norm_path.glob("*.parquet"):
-        print(file)
         if "max_projected" in file.name and "sc" in file.name:
             levels_to_merge_dict["max_projection"]["sc"].append(file)
         elif "max_projected" in file.name and "organoid" in file.name:
@@ -148,7 +147,7 @@ with open(organoid_blocklist_path, "w") as f:
         f.write(f"{item}\n")
 
 
-# In[7]:
+# In[ ]:
 
 
 dict_of_dfs_to_process = {
@@ -169,7 +168,7 @@ for profile_type in levels_to_merge_dict.keys():
     for compartment in levels_to_merge_dict[profile_type].keys():
         list_of_dfs = []
         for file in levels_to_merge_dict[profile_type][compartment]:
-            patient_id = str(file.parent).split("/")[-2]
+            patient_id = str(file.parent).split("/")[-3]  # -3 is the patient ID
             df = pd.read_parquet(file)
             df["Metadata_patient_tumor"] = patient_id
             list_of_dfs.append(df)
@@ -185,7 +184,7 @@ for profile_type in levels_to_merge_dict.keys():
         dict_of_dfs_to_process[profile_type][compartment] = new_df_path
 
 
-# In[ ]:
+# In[8]:
 
 
 for profile_type in dict_of_dfs_to_process.keys():
@@ -239,7 +238,7 @@ for profile_type in dict_of_dfs_to_process.keys():
                 population_df=fs_profiles,
                 strata=[
                     "Metadata_patient_tumor",
-                    "Metadata_well",
+                    "Metadata_Well",
                     "Metadata_treatment",
                     "Metadata_dose",
                     "Metadata_dose_unit",
@@ -321,7 +320,7 @@ for profile_type in dict_of_dfs_to_process.keys():
                 population_df=fs_profiles,
                 strata=[
                     "Metadata_patient_tumor",
-                    "Metadata_well",
+                    "Metadata_Well",
                     "Metadata_treatment",
                     "Metadata_dose",
                     "Metadata_dose_unit",
@@ -341,7 +340,6 @@ for profile_type in dict_of_dfs_to_process.keys():
                 population_df=fs_profiles,
                 strata=[
                     "Metadata_patient_tumor",
-                    "Metadata_well",
                     "Metadata_treatment",
                     "Metadata_dose",
                     "Metadata_dose_unit",
@@ -361,3 +359,14 @@ for profile_type in dict_of_dfs_to_process.keys():
                 "The number features before feature selection:", original_data_shape[1]
             )
             print("The number features after feature selection:", fs_profiles.shape[1])
+
+
+# In[ ]:
+
+
+import pandas as pd
+
+pd.read_parquet("../../data/all_patient_profiles/max_projection/sc_fs_profiles.parquet")
+
+
+# In[ ]:

@@ -4,10 +4,10 @@ git_root=$(git rev-parse --show-toplevel)
 
 if [ -d "/scratch/alpine" ]; then
     system="alpine"
-    ENV_PATH="/projects/mlippincott@xsede.org/software/uv/envs/nf1_uv_env"
+    ENV_PATH="/projects/mlippincott@xsede.org/software/uv/envs/nf1_2d_uv_env"
 elif [ -d "/anvil" ]; then
     system="anvil"
-    ENV_PATH="/anvil/projects/x-bio260064/software/uv/envs/nf1_uv_env"
+    ENV_PATH="/anvil/projects/x-bio260064/software/uv/envs/nf1_2d_uv_env"
 else
     system="local"
     ENV_PATH="$git_root/.venv"

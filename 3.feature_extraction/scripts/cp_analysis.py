@@ -5,7 +5,7 @@
 
 # ## Import libraries
 
-# In[9]:
+# In[1]:
 
 
 import os
@@ -39,7 +39,7 @@ else:
     import tqdm
 
 
-# In[10]:
+# In[2]:
 
 
 if not in_notebook:
@@ -53,8 +53,8 @@ if not in_notebook:
 
 else:
     print("Running in a notebook")
-    well_fov = "C4-2"
-    patient = "NF0014_T1"
+    well_fov = "G9-2"
+    patient = "NF0037_T1"
 
 
 max_projected_input = pathlib.Path(
@@ -70,7 +70,7 @@ middle_n_input = pathlib.Path(
 
 # ## Set paths and variables
 
-# In[11]:
+# In[3]:
 
 
 # set the run type for the parallelization
@@ -91,7 +91,7 @@ output_base_dir = f"{root_dir}"
 
 # ## Create dictionary to process data
 
-# In[12]:
+# In[4]:
 
 
 plate_info_dictionary = {}
@@ -161,7 +161,7 @@ except FileNotFoundError:
     path_to_apptainer_image = None
 
 
-# In[8]:
+# In[7]:
 
 
 if len(plates_to_run) == 0:

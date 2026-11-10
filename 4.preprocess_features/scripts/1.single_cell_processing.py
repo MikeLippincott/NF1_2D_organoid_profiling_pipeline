@@ -1,21 +1,26 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Process single cell profiles
+# # Process single cell and organoid profiles
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import os
 import pathlib
 import pprint
-import sys
 
 import pandas as pd
-from arg_parsing_utils import check_for_missing_args, parse_args
-from notebook_init_utils import bandicoot_check, init_notebook
+from image_analysis_2D.file_utils.arg_parsing_utils import (
+    check_for_missing_args,
+    parse_args,
+)
+from image_analysis_2D.file_utils.notebook_init_utils import (
+    bandicoot_check,
+    init_notebook,
+)
 from pycytominer import aggregate, annotate, feature_select, normalize
 from pycytominer.cyto_utils import infer_cp_features
 
@@ -23,6 +28,10 @@ root_dir, in_notebook = init_notebook()
 image_base_dir = bandicoot_check(
     pathlib.Path(os.path.expanduser("~/mnt/bandicoot")).resolve(), root_dir
 )
+if in_notebook:
+    import tqdm.notebook as tqdm
+else:
+    import tqdm
 
 
 # In[2]:
@@ -37,7 +46,7 @@ if not in_notebook:
     )
 else:
     print("Running in a notebook")
-    patient = "NF0014_T1"
+    patient = "SARCO219_T2"
 
 
 # ## Set paths and variables
@@ -66,104 +75,104 @@ feature_select_ops = [
 plate_info_dictionary = {
     "sc_max_projected": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/max_projected_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/max_projected_sc.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/max_projected_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/max_projected_sc.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/max_projected_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/max_projected_sc.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/max_projected_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/max_projected_sc.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/max_projected_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/max_projected_sc.parquet"
         ).resolve(),
     },
     "sc_middle_slice": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/middle_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/middle_slice_sc.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/middle_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/middle_slice_sc.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/middle_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/middle_slice_sc.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/middle_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/middle_slice_sc.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/middle_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/middle_slice_sc.parquet"
         ).resolve(),
     },
     "sc_middle_n_slice": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/middle_n_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/middle_n_slice_sc.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/middle_n_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/middle_n_slice_sc.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/middle_n_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/middle_n_slice_sc.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/middle_n_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/middle_n_slice_sc.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/middle_n_slice_sc.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/middle_n_slice_sc.parquet"
         ).resolve(),
     },
     "organoid_max_projected": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/max_projected_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/max_projected_organoid.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/max_projected_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/max_projected_organoid.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/max_projected_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/max_projected_organoid.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/max_projected_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/max_projected_organoid.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/max_projected_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/max_projected_organoid.parquet"
         ).resolve(),
     },
     "organoid_middle_slice": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/middle_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/middle_slice_organoid.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/middle_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/middle_slice_organoid.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/middle_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/middle_slice_organoid.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/middle_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/middle_slice_organoid.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/middle_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/middle_slice_organoid.parquet"
         ).resolve(),
     },
     "organoid_middle_n_slice": {
         "input_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/3.converted/middle_n_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/3.converted/middle_n_slice_organoid.parquet"
         ).resolve(strict=True),
         "annotated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/4.annotated/middle_n_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/4.annotated/middle_n_slice_organoid.parquet"
         ).resolve(),
         "normalized_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/5.normalized/middle_n_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/5.normalized/middle_n_slice_organoid.parquet"
         ).resolve(),
         "feature_selected_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/6.feature_selected/middle_n_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/6.feature_selected/middle_n_slice_organoid.parquet"
         ).resolve(),
         "aggregated_path": pathlib.Path(
-            f"../../data/{patient}/2D_analysis/7.aggregated/middle_n_slice_organoid.parquet"
+            f"{image_base_dir}/data/{patient}/2D_analysis/7.aggregated/middle_n_slice_organoid.parquet"
         ).resolve(),
     },
 }
@@ -182,16 +191,33 @@ drug_information_df = pd.read_csv(
 )
 
 
-# In[ ]:
+# In[6]:
 
 
-for plate, info in plate_info_dictionary.items():
+drug_information_df = pd.read_csv(
+    pathlib.Path(f"{root_dir}/4.preprocess_features/data/drugs/drug_information.csv")
+)
+
+
+# In[7]:
+
+
+drug_information_df = pd.read_csv(
+    pathlib.Path(f"{root_dir}/4.preprocess_features/data/drugs/drug_information.csv")
+)
+
+
+# In[8]:
+
+
+for plate, info in tqdm.tqdm(plate_info_dictionary.items()):
     print(f"Performing pycytominer pipeline for {plate}")
     # make the parent directories for the output files
     for key, value in info.items():
         value.parent.mkdir(parents=True, exist_ok=True)
 
     profile_df = pd.read_parquet(info["input_path"])
+    print(f"Profile shape: {profile_df.shape}")
     platemap_df = pd.read_csv(
         pathlib.Path(f"{root_dir}/data/{patient}/platemap/platemap.csv")
     )
@@ -212,6 +238,12 @@ for plate, info in plate_info_dictionary.items():
 
     # Load the annotated parquet file to fix metadata columns names
     annotated_df = pd.read_parquet(info["annotated_path"])
+
+    [
+        annotated_df.drop(columns=col, inplace=True)
+        for col in annotated_df.columns
+        if "plate" in col.lower()
+    ]
 
     print("Performing normalization...")
     # Step 2: Normalization
@@ -245,7 +277,6 @@ for plate, info in plate_info_dictionary.items():
     fs_df = feature_select(
         profiles=str(info["normalized_path"]),
         operation=feature_select_ops,
-        na_cutoff=0,
         features=cp_features,
         output_file=str(info["feature_selected_path"]),
         output_type="parquet",
@@ -258,6 +289,11 @@ for plate, info in plate_info_dictionary.items():
     fs_df = pd.read_parquet(info["feature_selected_path"])
     # Step 4: Aggregation
     print("Performing aggregation...")
+    single_cells_per_well = (
+        fs_df.groupby("Metadata_Well").size().reset_index(name="Metadata_cell_count")
+    )
+    # merge back into the fs_df
+    fs_df = fs_df.merge(single_cells_per_well, on="Metadata_Well", how="left")
     aggregate(
         population_df=fs_df,
         strata=["Metadata_treatment", "Metadata_dose"],
@@ -267,3 +303,10 @@ for plate, info in plate_info_dictionary.items():
         output_type="parquet",
     )
     print(f"Aggregation has been performed for:\n{plate}")
+
+
+# In[14]:
+
+
+df = pd.read_parquet(info["normalized_path"])
+[x for x in df.columns if "metadata" in x.lower()]

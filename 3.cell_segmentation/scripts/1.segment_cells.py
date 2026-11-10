@@ -13,10 +13,6 @@
 import os
 import pathlib
 
-import cucim
-import cupy
-import cupyx
-import cupyx.scipy.ndimage
 import matplotlib.pyplot as plt
 
 # Import dependencies
@@ -120,7 +116,7 @@ for f in files:
         nuclei_mask = io.imread(f)
 
 
-# In[ ]:
+# In[5]:
 
 
 cell = np.array(cell)
